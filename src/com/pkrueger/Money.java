@@ -30,16 +30,22 @@ public class Money implements Expression {
         return currency;
     }
 
-    public Money times(int multiplier) {
+    public Expression times(int multiplier) {
+
         return new Money(amount * multiplier, currency);
     }
 
-    public Expression plus(Money addend) {
+    public Expression plus(Expression addend) {
         return new Sum(this, addend);
     }
 
+    public String toString() {
+        return amount + " " + currency;
+    }
+
     @Override
-    public Money reduce(String toCurrency) {
-        return this;
+    public Money reduce(Bank bank, String toCurrency) {
+        int rate = bank.rate(currency, toCurrency);
+        return new Money(amount/rate, toCurrency);
     }
 }
